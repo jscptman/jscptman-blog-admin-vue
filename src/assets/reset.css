@@ -1,0 +1,55 @@
+@import url("./colors.css");
+/* 初始化页面高度 */
+html,
+body,
+#app,
+.root {
+  height: 100%;
+}
+
+/* 设置全局字体样式和行高 */
+body {
+  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans",
+    "Droid Sans", "Helvetica Neue", sans-serif;
+  font-size: 15px;
+  line-height: 1.5;
+  margin: 0;
+}
+input,
+textarea {
+  border-radius: 6px;
+  outline: none;
+  border: 1px solid #999;
+  vertical-align: middle;
+  min-height: 35px;
+  padding-left: 8px;
+  transition: all .5s ease-in-out;
+  box-shadow: none;
+  min-width: 60%;
+}
+input:focus, textarea:focus {
+  border-color: var(--deep-green);
+  box-shadow: 0 0 2px 4px var(--deep-green);
+} 
+input::placeholder, textarea::placeholder {
+  color: #999
+}
+/* 初始化替换元素的盒尺寸计算公式, 以便进行100%适配容器 */
+input,
+textarea,
+img,
+video,
+object {
+  box-sizing: border-box;
+}
+
+/* firefox浏览器中如果对没有src属性的图片设置宽高时, 因为该浏览器会将img当作普通的inline元素, 所以会无效(图片懒加载时有用) */
+img{
+  display: inline-block;
+   /*对于所有img元素先全部隐藏, 具体图片宽高在组件内部自行设置  */
+  visibility: hidden; 
+}
+img[src] {
+  /* 只显示有src属性的img元素(用于图片懒加载) */
+  visibility: visible;
+}
