@@ -1,6 +1,19 @@
+/*
+ * @Author: jscptman jscptman@163.com
+ * @Date: 2023-01-13 20:08:28
+ * @LastEditors: jscptman jscptman@163.com
+ * @LastEditTime: 2023-01-13 21:15:09
+ * @FilePath: /jscptman-blog-admin-vue/src/views/login/compose/useGetCode.ts
+ * @Description:
+ *
+ * Copyright (c) 2023 by jscptman jscptman@163.com, All Rights Reserved.
+ */
 import { effectScope, onScopeDispose, ref, computed } from "vue";
 import type { Ref } from "vue";
-function clickAnchorAnimationStart(
+import { $axios } from "@/http";
+
+// 控制点击获取验证码后的链接的样式逻辑
+function changeClickStatusByRemainTimer(
   clickStatus: any,
   remainTime: any,
   timer: any
@@ -18,10 +31,10 @@ function clickAnchorAnimationStart(
     remainTime.value--;
   }, 1000);
 }
-export default function useGetCode() {
-  let timer: NodeJS.Timer | undefined;
+export default function useGetCode(requestOptions: Record<string, any>) {
   const scope = effectScope();
   const result = scope.run(() => {
+    let timer: NodeJS.Timer | undefined;
     const clickStatus: Ref<"init" | "pending" | "finished"> = ref("init");
     const remainTime = ref(30);
     const tipText = computed(() => {
@@ -34,7 +47,8 @@ export default function useGetCode() {
       }
     });
     function getCode() {
-      clickAnchorAnimationStart(clickStatus, remainTime, timer);
+      changeClickStatusByRemainTimer(clickStatus, remainTime, timer);
+      $axios({ ...requestOptions });
     }
     onScopeDispose(() => {
       scope.stop();
@@ -43,5 +57,5 @@ export default function useGetCode() {
     return { clickStatus, tipText, getCode };
   });
 
-  return result as Exclude<typeof result, undefined>;
+  return result as NonNullable<typeof result>;
 }

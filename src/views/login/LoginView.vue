@@ -1,7 +1,24 @@
 <script setup lang="ts">
 import JsmButton from "../../components/global/jsmButton/JsmButton.vue";
 import useGetCode from "./compose/useGetCode";
-const { clickStatus, tipText, getCode } = useGetCode();
+import { validateEmail } from "@/utils";
+
+import { ref } from "vue";
+
+const username = ref("");
+const verificationCode = ref("");
+const getCodeUrl = `login/getVerificationCode?username=${username.value}`;
+const { clickStatus, tipText, getCode } = useGetCode({ url: getCodeUrl });
+
+function doGetCode() {
+  const isValid = validateEmail(username.value);
+  if (isValid) {
+    getCode();
+  } else {
+    console.log("邮箱格式有误");
+  }
+}
+function login() {}
 </script>
 <template>
   <div class="root">
@@ -10,12 +27,13 @@ const { clickStatus, tipText, getCode } = useGetCode();
         <h1>登录</h1>
         <fieldset>
           <legend>请输入以下信息</legend>
-          <label for="cell-phone-number">手机号 :</label>
+          <label for="cell-phone-number">邮箱 :</label>
           <input
             type="text"
             id="cell-phone-number"
-            placeholder="请输入手机号"
+            placeholder="请输入邮箱"
             autofocus
+            v-module="username"
           />
           <br />
           <label for="verification-code">验证码 :</label>
@@ -23,11 +41,12 @@ const { clickStatus, tipText, getCode } = useGetCode();
             type="text"
             id="verification-code"
             placeholder="请输入验证码"
+            v-module="verificationCode"
           />
           <div class="get-code">
             <a
               href="/getVerificationCode"
-              @click.prevent="getCode"
+              @click.prevent="doGetCode"
               :style="{
                 cursor: clickStatus === 'pending' ? 'not-allowed' : 'pointer',
               }"
@@ -40,6 +59,7 @@ const { clickStatus, tipText, getCode } = useGetCode();
           style="margin-top: 26px"
           button-type="next"
           type="submit"
+          @click.prevent="login"
         />
       </form>
     </main>
