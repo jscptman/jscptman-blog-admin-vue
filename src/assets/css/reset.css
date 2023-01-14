@@ -15,6 +15,11 @@ body {
   line-height: 1.5;
   margin: 0;
 }
+
+label {
+  display: inline-block;
+}
+
 input,
 textarea {
   border-radius: 6px;
@@ -27,13 +32,16 @@ textarea {
   box-shadow: none;
   min-width: 60%;
 }
+
 input:focus, textarea:focus {
   border-color: var(--deep-green);
   box-shadow: 0 0 2px 4px var(--deep-green);
 } 
+
 input::placeholder, textarea::placeholder {
   color: #999
 }
+
 /* 初始化替换元素的盒尺寸计算公式, 以便进行100%适配容器 */
 input,
 textarea,
