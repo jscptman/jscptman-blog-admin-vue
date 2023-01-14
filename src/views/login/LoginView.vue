@@ -3,17 +3,20 @@ import JsmButton from "../../components/global/jsmButton/JsmButton.vue";
 import useGetCode from "./compose/useGetCode";
 import { validateEmail } from "@/utils";
 
-import { ref } from "vue";
+import { ref, computed } from "vue";
 
 const username = ref("");
 const verificationCode = ref("");
-const getCodeUrl = `login/getVerificationCode?username=${username.value}`;
-const { clickStatus, tipText, getCode } = useGetCode({ url: getCodeUrl });
+const getCodeUrl = computed(
+  () => `login/getVerificationCode?username=${username.value}`
+);
+const { clickStatus, tipText, getCode } = useGetCode(ref({ url: getCodeUrl }));
 
-function doGetCode() {
+async function doGetCode() {
   const isValid = validateEmail(username.value);
   if (isValid) {
-    getCode();
+    const responseData = await getCode();
+    console.log(responseData);
   } else {
     console.log("邮箱格式有误");
   }
@@ -27,21 +30,21 @@ function login() {}
         <h1>登录</h1>
         <fieldset>
           <legend>请输入以下信息</legend>
-          <label for="cell-phone-number">邮箱 :</label>
+          <label for="cell-phone-number" class="form-label">邮箱 :</label>
           <input
             type="text"
             id="cell-phone-number"
             placeholder="请输入邮箱"
             autofocus
-            v-module="username"
+            v-model="username"
           />
           <br />
-          <label for="verification-code">验证码 :</label>
+          <label for="verification-code" class="form-label">验证码 :</label>
           <input
             type="text"
             id="verification-code"
             placeholder="请输入验证码"
-            v-module="verificationCode"
+            v-model="verificationCode"
           />
           <div class="get-code">
             <a
@@ -122,5 +125,9 @@ a {
   position: relative;
   height: 100%;
   overflow: hidden;
+}
+.form-label {
+  min-width: 80px;
+  text-align: right;
 }
 </style>
