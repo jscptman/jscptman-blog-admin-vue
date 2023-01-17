@@ -2,11 +2,12 @@
 import JsmButton from "../../components/global/jsmButton/JsmButton.vue";
 import useGetCode from "./compose/useGetCode";
 import { validateEmail } from "@/utils";
-
 import { ref, computed } from "vue";
-
+import { useAxios } from "@/http";
+import { useRouter } from "vue-router";
 const username = ref("");
 const verificationCode = ref("");
+const $router = useRouter();
 const getCodeUrl = computed(
   () => `login/getVerificationCode?username=${username.value}`
 );
@@ -21,7 +22,22 @@ async function doGetCode() {
     console.log("邮箱格式有误");
   }
 }
-function login() {}
+async function login() {
+  const { asyncData } = useAxios({
+    method: "post",
+    data: {
+      username: username.value,
+      verificationCode: verificationCode.value,
+    },
+    headers: {
+      "content-type": "application/x-www-form-urlencoded",
+    },
+    url: "login",
+    withCredentials: true,
+  });
+
+  $router.push({ path: "/" });
+}
 </script>
 <template>
   <div class="root">
