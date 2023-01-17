@@ -2,7 +2,7 @@
  * @Author: jscptman jscptman@163.com
  * @Date: 2023-01-11 13:11:28
  * @LastEditors: jscptman jscptman@163.com
- * @LastEditTime: 2023-01-14 21:09:59
+ * @LastEditTime: 2023-01-16 20:34:23
  * @FilePath: /jscptman-blog-admin-vue/src/http/index.ts
  * @Description:
  *
@@ -14,15 +14,9 @@ import axios from "axios";
 import type { AxiosRequestConfig, AxiosResponse } from "axios";
 const instance = axios.create({
   baseURL: import.meta.env.VITE_AXIOS_PREFIX,
-  timeout: 1500,
+  timeout: 10000,
   withCredentials: true,
 });
-
-// 添加响应拦截器
-// instance.interceptors.response.use(function (response) {
-//   // 对响应数据做点什么
-//   return response;
-// });
 
 export const $axios = instance;
 
